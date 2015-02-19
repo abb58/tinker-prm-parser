@@ -10,14 +10,15 @@ var _ = require('underscore');
 var UTF8 = { encoding: 'utf8' };
 
 // load datastore
-var DS;
+var DataStorage;
 if(config.DS === 'file') {
-    DS = require('./fileDS');
+    DataStorage = require('./fileDS');
 }
 else {
-    DS = require('./mongoDS');
+    DataStorage = require('./mongoDS');
 }
 
+var DS = new DataStorage();
 /*
     PRM Parser
  */
@@ -31,6 +32,8 @@ Parser.prototype.parseFile = function(fileName) {
         LOG.error("File "+filePath+" doesn't exist... Skipping.");
         return;
     }
+
+    LOG.log("Parsing " + fileName);
 
     var fileContent = fs.readFileSync(filePath, UTF8);
 
@@ -88,8 +91,12 @@ Parser.prototype.parseFile = function(fileName) {
         }
     });
 
-    LOG.log(data);
+    var outputFilename = path.basename(fileName, '.' + config.PRM_EXT);
+    outputFilename += '.json';
+    var outputFile = path.join(config.PRM_OUTPUTFOLDER, outputFilename);
+    DS.save(outputFile, data);
 
+    LOG.log(fileName + " processed, output written to " + outputFile);
 };
 
 module.exports = Parser;

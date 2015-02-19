@@ -5,6 +5,8 @@
 module.exports = {
 
     PRM_INPUTFOLDER: "../prm/",
+    PRM_OUTPUTFOLDER: "../prm/json",
+    PRM_EXT: "prm",
 
     DS: "file",
 
