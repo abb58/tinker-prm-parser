@@ -1,0 +1,23 @@
+{
+  "name": "tinker-prm-parser",
+  "description": "Small tool that parses TINKER PARAMS files - see http://dasher.wustl.edu/tinker/distribution/params/",
+  "version": "0.0.1",
+
+  "author": {
+    "name": "Gergely Varga",
+    "email": "greg@sph3r.com",
+    "url": "https://github.com/sperka"
+  },
+
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sperka/tinker-prm-parser.git"
+  },
+
+  "dependencies": {
+    "config": "*",
+    "mongodb": "*",
+    "moment": "*",
+    "underscore": "*"
+  }
+}
