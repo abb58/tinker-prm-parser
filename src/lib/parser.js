@@ -26,6 +26,18 @@ function Parser() {
 
 }
 
+Parser.prototype.parseFolder = function(folder) {
+	var files = fs.readdirSync(folder);
+	_.each(files, function(file) {
+		var stat = fs.statSync(path.join(folder, file));
+		if(stat.isFile()) {
+			if(path.extname(file) === config.PRM_EXT) {
+				this.parseFile(file);
+			}
+		}
+	}, this);
+};
+
 Parser.prototype.parseFile = function(fileName) {
     var filePath = path.join(config.PRM_INPUTFOLDER, fileName);
     if(!fs.existsSync(filePath)) {
@@ -91,12 +103,17 @@ Parser.prototype.parseFile = function(fileName) {
         }
     });
 
-    var outputFilename = path.basename(fileName, '.' + config.PRM_EXT);
-    outputFilename += '.json';
-    var outputFile = path.join(config.PRM_OUTPUTFOLDER, outputFilename);
-    DS.save(outputFile, data);
+	if(config.DS === 'file') {
+		var outputFilename = path.basename(fileName, config.PRM_EXT);
+		outputFilename += '.json';
 
-    LOG.log(fileName + " processed, output written to " + outputFile);
+		DS.save(outputFilename, data);
+
+		LOG.log(fileName + " processed, output written to " + outputFilename);
+	}
+	else if(config.DS === 'mongo') {
+		// ...
+	}
 };
 
 module.exports = Parser;
